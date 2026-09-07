@@ -54,9 +54,6 @@ export default function Gallery() {
                 />
               )}
             </div>
-            <figcaption className="font-mono text-[12.5px] leading-[1.5] text-text-dim">
-              {photo.caption}
-            </figcaption>
           </figure>
         ))}
       </div>
