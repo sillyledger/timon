@@ -6,6 +6,7 @@ import { galleryData, themes, type Theme } from "@/lib/galleryData";
 
 export default function Gallery() {
   const [active, setActive] = useState<Theme>("kitten");
+  const [failedSrcs, setFailedSrcs] = useState<Set<string>>(new Set());
   const photos = galleryData[active];
 
   return (
@@ -40,13 +41,18 @@ export default function Gallery() {
         {photos.map((photo) => (
           <figure key={photo.src} className="m-0">
             <div className="relative mb-3 aspect-[4/5] overflow-hidden border border-line bg-surface">
-              <Image
-                src={photo.src}
-                alt={photo.caption}
-                fill
-                sizes="(max-width: 480px) 100vw, (max-width: 760px) 50vw, 25vw"
-                className="object-cover"
-              />
+              {!failedSrcs.has(photo.src) && (
+                <Image
+                  src={photo.src}
+                  alt={photo.caption}
+                  fill
+                  sizes="(max-width: 480px) 100vw, (max-width: 760px) 50vw, 25vw"
+                  className="object-cover"
+                  onError={() =>
+                    setFailedSrcs((prev) => new Set(prev).add(photo.src))
+                  }
+                />
+              )}
             </div>
             <figcaption className="font-mono text-[12.5px] leading-[1.5] text-text-dim">
               {photo.caption}
